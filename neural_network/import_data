@@ -1,0 +1,45 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Sat Sep 12 14:15:27 2020
+导入数据并进行训练
+@author: 未海
+"""
+#-*- coding:utf-8 -*-
+import numpy as np
+from sklearn.model_selection import train_test_split
+import MyNetWork
+#导入文件的方式导入数据，但也只把密度和糖分的数据以及输出的数据读出
+#file1 = open(r'C:\Users\watermelon3_0_Ch.csv','r',encoding='UTF-8')
+#data = [line.strip('\n').split(',') for line in file1]
+#x = [[float(raw[-3]), float(raw[-2])] for raw in data[1:]]
+#y= [1 if raw[-1]=='\xca\xc7' else 0 for raw in data[1:]]
+#x = np.array(x)
+#数据集的导入，此处为简便计，只考虑西瓜数据集的密度和糖分两个属性
+#可以给其他属性进行编码从而导入其中进行神经网络的训练
+#将数据集划分为输入与输出
+x=[np.array([[0.697],[0.460]]),np.array([[0.774],[0.376]]),np.array([[0.634],[0.264]]),np.array([[0.608],[0.318]]),\
+   np.array([[0.556],[0.215]]),np.array([[0.403],[0.237]]),np.array([[0.481],[0.149]]),np.array([[0.437],[0.211]]),\
+       np.array([[0.666],[0.091]]),np.array([[0.243],[0.267]]),np.array([[0.245],[0.057]]),np.array([[0.343],[0.099]]),\
+           np.array([[0.639],[0.161]]),np.array([[0.657],[0.198]]),np.array([[0.360],[0.370]]),np.array([[0.593],[0.042]]),\
+               np.array([[0.719],[0.103]])]
+y=[np.array([[1]]),np.array([[1]]),np.array([[1]]),np.array([[1]]),np.array([[1]]),np.array([[1]]),np.array([[1]]),np.array([[1]]),\
+   np.array([[0]]),np.array([[0]]),np.array([[0]]),np.array([[0]]),np.array([[0]]),np.array([[0]]),np.array([[0]]),np.array([[0]]),\
+       np.array([[0]]),]
+#划分数据集为训练数据集与验证数据集
+x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=0.2,random_state=1 )
+training_data=zip(x_train,y_train)
+test_data=zip(x_test,y_test)
+training_data=zip(x_train,y_train)
+#调用神经网络进行训练，设置输入层，隐层及输出层
+net=MyNetWork.Network([2, 5, 1])
+#设置用于随机梯度的小样本生成的步长
+mini_batch_size=2
+#迭代次数
+times=250
+#学习速率
+learning_rate=0.1
+#将训练数据和验证数据转为列表格式（transpose的指令只能适用于列表格式貌似）
+training_data=list(training_data)
+test_data=list(test_data)
+net.SGD(training_data,mini_batch_size,times,learning_rate,test_data)
+
